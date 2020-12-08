@@ -1,7 +1,7 @@
 import type { AWS } from '@serverless/typescript';
 
 const serverlessConfiguration: AWS = {
-  service: 'advent-calendar-notification',
+  service: 'ac2020',
   frameworkVersion: '2',
   custom: {
     defaultStage: 'dev',
