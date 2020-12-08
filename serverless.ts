@@ -30,6 +30,7 @@ const serverlessConfiguration: AWS = {
   functions: {
     main: {
       handler: 'handler.main',
+      timeout: 60,
       layers: [{ Ref: 'AdventCalendarNotificationLambdaLayer' }],
     },
   },
