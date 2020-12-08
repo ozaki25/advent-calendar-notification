@@ -16,6 +16,7 @@ const serverlessConfiguration: AWS = {
     name: 'aws',
     runtime: 'nodejs12.x',
     profile: 'aa',
+    region: 'ap-northeast-1',
     stage: '${opt:stage, self:custom.defaultStage}',
     apiGateway: {
       minimumCompressionSize: 1024,
@@ -26,16 +27,8 @@ const serverlessConfiguration: AWS = {
     },
   },
   functions: {
-    hello: {
-      handler: 'handler.hello',
-      events: [
-        {
-          http: {
-            method: 'get',
-            path: 'hello',
-          },
-        },
-      ],
+    main: {
+      handler: 'handler.main',
     },
   },
 };
