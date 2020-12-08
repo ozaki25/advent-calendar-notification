@@ -7,6 +7,8 @@ import {
   puppeteer,
 } from 'chrome-aws-lambda';
 
+const { TARGET_URL } = process.env;
+
 export const main: APIGatewayProxyHandler = async () => {
   const browser = await puppeteer.launch({
     args,
@@ -16,7 +18,7 @@ export const main: APIGatewayProxyHandler = async () => {
   });
 
   const page = await browser.newPage();
-  await page.goto('https://qiita.com/advent-calendar/2020/mdc');
+  await page.goto(TARGET_URL);
   const result = await page.evaluate(() => {
     const days = document.querySelectorAll('.adventCalendarCalendar_day');
     const date = new Date().getDate() - 1;
