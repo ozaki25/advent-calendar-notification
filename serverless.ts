@@ -23,12 +23,20 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       STAGE: '${self:provider.stage}',
+      LAYER_NAME: '${self:service}-${self:provider.stage}',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
     },
   },
   functions: {
     main: {
       handler: 'handler.main',
+      layers: [{ Ref: 'AdventCalendarNotificationLambdaLayer' }],
+    },
+  },
+  layers: {
+    adventCalendarNotification: {
+      path: 'layers',
+      name: '${self:provider.environment.LAYER_NAME}',
     },
   },
 };

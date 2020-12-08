@@ -1,13 +1,15 @@
 const path = require('path');
 const slsw = require('serverless-webpack');
-const nodeExternals = require('webpack-node-externals');
+// const nodeExternals = require('webpack-node-externals');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   context: __dirname,
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
   entry: slsw.lib.entries,
-  devtool: slsw.lib.webpack.isLocal ? 'eval-cheap-module-source-map' : 'source-map',
+  devtool: slsw.lib.webpack.isLocal
+    ? 'eval-cheap-module-source-map'
+    : 'source-map',
   resolve: {
     extensions: ['.mjs', '.json', '.ts'],
     symlinks: false,
@@ -22,7 +24,8 @@ module.exports = {
     concatenateModules: false,
   },
   target: 'node',
-  externals: [nodeExternals()],
+  externals: ['chrome-aws-lambda', 'puppeteer-core'],
+  // externals: [nodeExternals()],
   module: {
     rules: [
       // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
@@ -31,6 +34,7 @@ module.exports = {
         loader: 'ts-loader',
         exclude: [
           [
+            path.resolve(__dirname, 'layers'),
             path.resolve(__dirname, 'node_modules'),
             path.resolve(__dirname, '.serverless'),
             path.resolve(__dirname, '.webpack'),
