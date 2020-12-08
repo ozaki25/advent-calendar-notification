@@ -15,7 +15,7 @@ const serverlessConfiguration: AWS = {
         channel: '${env:SLACK_CHANNEL_DEV}',
         username: '${env:SLACK_USERNAME_DEV}',
       },
-      production: {
+      prod: {
         token: '${env:SLACK_API_TOKEN_PROD}',
         channel: '${env:SLACK_CHANNEL_PROD}',
         username: '${env:SLACK_USERNAME_PROD}',
