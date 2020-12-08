@@ -8,6 +8,7 @@
     "deploy:prod": "sls deploy --stage prod"
   },
   "dependencies": {
+    "@slack/web-api": "^5.14.0",
     "chrome-aws-lambda": "^5.5.0",
     "puppeteer-core": "^5.5.0",
     "source-map-support": "^0.5.19"
