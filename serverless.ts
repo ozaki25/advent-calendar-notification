@@ -49,6 +49,7 @@ const serverlessConfiguration: AWS = {
       handler: 'handler.main',
       timeout: 60,
       layers: [{ Ref: 'AdventCalendarNotificationLambdaLayer' }],
+      events: [{ schedule: 'cron(5 22 * * ? *)' }], // 毎朝7:05
     },
   },
   layers: {
