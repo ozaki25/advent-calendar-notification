@@ -18,6 +18,8 @@ const {
 const slackClient = new WebClient(SLACK_API_TOKEN);
 
 export const main: APIGatewayProxyHandler = async () => {
+  console.log(new Date());
+
   const browser = await puppeteer.launch({
     args,
     defaultViewport,
@@ -29,8 +31,8 @@ export const main: APIGatewayProxyHandler = async () => {
   await page.goto(TARGET_URL);
   const article = await page.evaluate(() => {
     const days = document.querySelectorAll('.adventCalendarCalendar_day');
-    const date = new Date().getDate() - 1;
-    const target = days[date].querySelector(
+    const date = new Date().getDate();
+    const target = days[date - 1].querySelector(
       '.adventCalendarCalendar_comment a',
     );
     if (!target) return null;
