@@ -36,6 +36,7 @@ const serverlessConfiguration: AWS = {
     environment: {
       STAGE: '${self:provider.stage}',
       LAYER_NAME: '${self:service}-${self:provider.stage}',
+      TZ: 'Asia/Tokyo',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       TARGET_URL: 'https://qiita.com/advent-calendar/2020/mdc',
       SLACK_API_TOKEN: '${self:custom.slack.${self:provider.stage}.token}',
