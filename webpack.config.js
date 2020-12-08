@@ -24,7 +24,12 @@ module.exports = {
     concatenateModules: false,
   },
   target: 'node',
-  externals: ['chrome-aws-lambda', 'puppeteer-core', '@slack/web-api'],
+  externals: [
+    'chrome-aws-lambda',
+    'puppeteer-core',
+    'puppeteer',
+    '@slack/web-api',
+  ],
   // externals: [nodeExternals()],
   module: {
     rules: [
