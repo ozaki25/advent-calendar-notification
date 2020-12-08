@@ -26,7 +26,9 @@ const excuteScraping = async () => {
   });
 
   const page = await browser.newPage();
+  await page.emulateTimezone('Asia/Tokyo');
   await page.goto(TARGET_URL);
+
   const article = await page.evaluate(() => {
     const days = document.querySelectorAll('.adventCalendarCalendar_day');
     const date = new Date().getDate();
