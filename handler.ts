@@ -17,13 +17,7 @@ const {
 
 const slackClient = new WebClient(SLACK_API_TOKEN);
 
-export const main: APIGatewayProxyHandler = async () => {
-  const d = new Date();
-  console.log(d);
-  console.log(d.getDate());
-  console.log(d.getHours());
-  console.log(d.getMinutes());
-
+const excuteScraping = async () => {
   const browser = await puppeteer.launch({
     args,
     defaultViewport,
@@ -43,6 +37,27 @@ export const main: APIGatewayProxyHandler = async () => {
     return { title: target.text, url: target.href, date };
   });
   await browser.close();
+  return article;
+};
+
+const excuteSlackNotification = async (text: string) => {
+  console.log({ text });
+  return await slackClient.chat.postMessage({
+    text,
+    channel: SLACK_CHANNEL,
+    username: SLACK_USERNAME,
+    unfurl_links: true,
+  });
+};
+
+export const main: APIGatewayProxyHandler = async () => {
+  const d = new Date();
+  console.log(d);
+  console.log(d.getDate());
+  console.log(d.getHours());
+  console.log(d.getMinutes());
+
+  const article = await excuteScraping();
 
   console.log(article);
   if (!article) return { statusCode: 200, body: '記事が投稿されてません' };
@@ -50,13 +65,7 @@ export const main: APIGatewayProxyHandler = async () => {
   const { title, url, date } = article;
   const text = `MDC Advent Calendar 2020 ${date}日目の記事です！
 <${url}|${title}>`;
-  console.log({ text });
-  await slackClient.chat.postMessage({
-    text,
-    channel: SLACK_CHANNEL,
-    username: SLACK_USERNAME,
-    unfurl_links: true,
-  });
+  await excuteSlackNotification(text);
 
   return {
     statusCode: 200,
