@@ -9,6 +9,18 @@ const serverlessConfiguration: AWS = {
       webpackConfig: './webpack.config.js',
       includeModules: true,
     },
+    slack: {
+      dev: {
+        token: '${env:SLACK_API_TOKEN_DEV}',
+        channel: '${env:SLACK_CHANNEL_DEV}',
+        username: '${env:SLACK_USERNAME_DEV}',
+      },
+      production: {
+        token: '${env:SLACK_API_TOKEN_PROD}',
+        channel: '${env:SLACK_CHANNEL_PROD}',
+        username: '${env:SLACK_USERNAME_PROD}',
+      },
+    },
   },
   // Add the serverless-webpack plugin
   plugins: ['serverless-webpack', 'serverless-dotenv-plugin'],
@@ -26,6 +38,9 @@ const serverlessConfiguration: AWS = {
       LAYER_NAME: '${self:service}-${self:provider.stage}',
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: '1',
       TARGET_URL: 'https://qiita.com/advent-calendar/2020/mdc',
+      SLACK_API_TOKEN: '${self:custom.slack.${self:provider.stage}.token}',
+      SLACK_CHANNEL: '${self:custom.slack.${self:provider.stage}.channel}',
+      SLACK_USERNAME: '${self:custom.slack.${self:provider.stage}.username}',
     },
   },
   functions: {

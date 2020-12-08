@@ -6,8 +6,16 @@ import {
   headless,
   puppeteer,
 } from 'chrome-aws-lambda';
+import { WebClient } from '@slack/web-api';
 
-const { TARGET_URL } = process.env;
+const {
+  TARGET_URL,
+  SLACK_API_TOKEN,
+  SLACK_CHANNEL,
+  SLACK_USERNAME,
+} = process.env;
+
+const slackClient = new WebClient(SLACK_API_TOKEN);
 
 export const main: APIGatewayProxyHandler = async () => {
   const browser = await puppeteer.launch({
@@ -19,7 +27,7 @@ export const main: APIGatewayProxyHandler = async () => {
 
   const page = await browser.newPage();
   await page.goto(TARGET_URL);
-  const result = await page.evaluate(() => {
+  const article = await page.evaluate(() => {
     const days = document.querySelectorAll('.adventCalendarCalendar_day');
     const date = new Date().getDate() - 1;
     const target = days[date].querySelector(
@@ -28,14 +36,24 @@ export const main: APIGatewayProxyHandler = async () => {
     if (!target) return null;
     return { title: target.text, url: target.href, date };
   });
-  console.log(result);
   await browser.close();
 
-  if (!result) return { statusCode: 200, body: '記事が投稿されてません' };
+  console.log(article);
+  if (!article) return { statusCode: 200, body: '記事が投稿されてません' };
 
-  const { title, url, date } = result;
+  const { title, url, date } = article;
+  const text = `MDC Advent Calendar 2020 ${date}日目の記事です！
+<${url}|${title}>`;
+  console.log({ text });
+  await slackClient.chat.postMessage({
+    text,
+    channel: SLACK_CHANNEL,
+    username: SLACK_USERNAME,
+    unfurl_links: true,
+  });
+
   return {
     statusCode: 200,
-    body: JSON.stringify({ title, url, date }),
+    body: JSON.stringify({ text, title, url, date }),
   };
 };
