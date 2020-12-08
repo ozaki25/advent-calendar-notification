@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "@slack/web-api": "^5.14.0",
     "chrome-aws-lambda": "^5.5.0",
     "puppeteer-core": "^5.5.0"
   }
